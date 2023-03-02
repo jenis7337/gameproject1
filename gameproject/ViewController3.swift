@@ -18,12 +18,15 @@ class ViewController3: UIViewController {
     var first = 0
     var second = 0
     var ans = 0
+    var point = 0
+    var highscore = UserDefaults.standard.integer(forKey: "highscore")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         genret()
         pg.progress = 1.0
         progress()
+        scoreLabel1()
     }
     func progress(){
         var a : Float = 1.0
@@ -39,9 +42,13 @@ class ViewController3: UIViewController {
             }
         })
     }
+    func scoreLabel1(){
+        scoreLabel.layer.cornerRadius = 15
+        scoreLabel.layer.masksToBounds = true
+    }
     func genret(){
-        var firstNumber = Int.random(in: 1...100)
-        var secondNumber = Int.random(in: 50...100)
+        var firstNumber = Int.random(in: 1...99)
+        var secondNumber = Int.random(in: 50...99)
         var array = ["+","-"]
         var opretor = array.randomElement()
         qeustionLabel.text = "\(firstNumber)"
@@ -58,12 +65,16 @@ class ViewController3: UIViewController {
         labelOfAnswer.text = "\(ans)"
     }
     func showAlert(title:String){
-        let alert = UIAlertController(title: "Game Over", message: title, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Game Over", message: "Score:\(point)\n High score:\(highscore)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Home", style: .default,handler: { _ in
             self.naviget()
         }))
         alert.addAction(UIAlertAction(title: "Restart", style: .default,handler: { _ in
+            self.scoreLabel.text = "\(self.point -= self.point)"
+            self.scoreLabel.text = "\(0)"
             self.progress()
+            self.genret()
+           
         }))
         present(alert, animated: true)
     }
