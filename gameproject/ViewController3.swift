@@ -2,6 +2,16 @@ import UIKit
 
 class ViewController3: UIViewController {
     
+    var time1 = Timer()
+    var freq = 0.1
+    var score = 0
+    var first = 0
+    var second = 0
+    var ans = 0
+    var ans1 = 0
+    var point = 0
+    var highscore = 0
+//    var highscore = UserDefaults.standard.integer(forKey: "highscore")
     
     @IBOutlet weak var pg: UIProgressView!
     @IBOutlet weak var qeustionLabel: UILabel!
@@ -12,14 +22,8 @@ class ViewController3: UIViewController {
     @IBOutlet weak var labelOfAnswer: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var falseButton: UIButton!
-    var time1 = Timer()
-    var freq = 0.1
-    var a = 0
-    var first = 0
-    var second = 0
-    var ans = 0
-    var point = 0
-    var highscore = UserDefaults.standard.integer(forKey: "highscore")
+    
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +31,19 @@ class ViewController3: UIViewController {
         pg.progress = 1.0
         progress()
         scoreLabel1()
+      
+        score = point
+       highscore = score
+        updatehighscore()
+        self.updatehighscore()
+       
+    }
+    func updatehighscore(){
+        if score > highscore
+        {
+            highscore = score
+//            UserDefaults.standard.set(highscore, forKey: "highscore")
+        }
     }
     func progress(){
         var a : Float = 1.0
@@ -38,6 +55,7 @@ class ViewController3: UIViewController {
             if self.pg.progress == 0.0{
                 self.pg.progress = 1.0
                 self.time1.invalidate()
+                self.updatehighscore()
                 self.showAlert(title: "")
             }
         })
@@ -49,8 +67,10 @@ class ViewController3: UIViewController {
     func genret(){
         var firstNumber = Int.random(in: 1...99)
         var secondNumber = Int.random(in: 50...99)
+        
         var array = ["+","-"]
         var opretor = array.randomElement()
+        
         qeustionLabel.text = "\(firstNumber)"
         qeustionLabel3.text = "\(secondNumber)"
         qeustion2Label.text = opretor
@@ -65,15 +85,17 @@ class ViewController3: UIViewController {
         labelOfAnswer.text = "\(ans)"
     }
     func showAlert(title:String){
-        let alert = UIAlertController(title: "Game Over", message: "Score:\(point)\n High score:\(highscore)", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Game Over", message: "Score:\(score)\n High score:\(highscore)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Home", style: .default,handler: { _ in
             self.naviget()
         }))
         alert.addAction(UIAlertAction(title: "Restart", style: .default,handler: { _ in
             self.scoreLabel.text = "\(self.point -= self.point)"
-            self.scoreLabel.text = "\(0)"
+            self.score = 0
+            self.scoreLabel.text = "0"
             self.progress()
             self.genret()
+            self.updatehighscore()
            
         }))
         present(alert, animated: true)
@@ -83,35 +105,42 @@ class ViewController3: UIViewController {
         navigationController?.popViewController(animated: false)
     }
     @IBAction func trueButtonAction(_ sender: UIButton) {
-        if qeustionLabel3.text == "+" && qeustionLabel3.text == "-"{
-            a+=1
-            scoreLabel.text = "\(a)"
+        if labelOfAnswer.text == "\(ans)"{
+            score+=1
+            scoreLabel.text = "\(score)"
             ans = first + second
             genret()
            
-        }else{
-            a+=1
-            scoreLabel.text = "\(a)"
-            ans = first - second
+        }else if labelOfAnswer.text == "\(ans1)"{
+            score+=1
+            scoreLabel.text = "\(score)"
+            ans1 = first - second
             genret()
             
+        }
+        else{
+            showAlert(title: "game over")
         }
         labelOfAnswer.text = "\(ans)"
        progress()
    }
    @IBAction func falseButtonAction(_ sender: UIButton) {
-       if qeustionLabel3.text == "+" && qeustionLabel3.text == "-"{
-           a+=1
-           scoreLabel.text = "\(a)"
+       if labelOfAnswer.text == "\(ans)"{
+           score+=1
+           scoreLabel.text = "\(score)"
            ans = first + second
           genret()
            
-       }else{
-           a+=1
-           scoreLabel.text = "\(a)"
-           ans = first - second
+       }else if labelOfAnswer.text == "\(ans1)"{
+           ans1 = first - second
+           score+=1
+           scoreLabel.text = "\(score)"
+           
            genret()
            
+       }
+       else{
+           showAlert(title: "game over")
        }
        labelOfAnswer.text = "\(ans)"
        progress()
