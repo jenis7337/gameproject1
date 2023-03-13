@@ -8,14 +8,16 @@ class ViewController3: UIViewController {
     var first = 0
     var second = 0
     var ans = 0
-    var ans1 = 0
+    var array2 = [Int]()
     var point = 0
     var highscore = 0
+    var abc = 0
+    
 //    var highscore = UserDefaults.standard.integer(forKey: "highscore")
     
     @IBOutlet weak var pg: UIProgressView!
     @IBOutlet weak var qeustionLabel: UILabel!
-    @IBOutlet weak var qeustion2Label: UILabel!
+    @IBOutlet weak var opretorOfLabel: UILabel!
     @IBOutlet weak var qeustionLabel3: UILabel!
     @IBOutlet weak var labelEqual: UILabel!
     @IBOutlet weak var trueButton: UIButton!
@@ -66,23 +68,31 @@ class ViewController3: UIViewController {
     }
     func genret(){
         var firstNumber = Int.random(in: 1...99)
-        var secondNumber = Int.random(in: 50...99)
+        var secondNumber = Int.random(in: 1...99)
         
         var array = ["+","-"]
         var opretor = array.randomElement()
         
+        var addition = firstNumber + secondNumber
+        var subsraction = firstNumber - secondNumber
+        
+        opretorOfLabel.text = opretor
+
+        if opretorOfLabel.text == "+"{
+            ans = addition
+        }
+        else{
+            ans = subsraction
+        }
+        
+        var randomAnswer = Int.random(in: 1...200)
+        var array2 = [ans,randomAnswer]
+        array2.shuffle()
         qeustionLabel.text = "\(firstNumber)"
         qeustionLabel3.text = "\(secondNumber)"
-        qeustion2Label.text = opretor
-        let addition = firstNumber + secondNumber
-        let subsraction = firstNumber - secondNumber
-        if qeustionLabel3.text == "+" && qeustionLabel3.text == "-"{
-            ans = firstNumber + secondNumber
-        }else{
-
-            ans = firstNumber - secondNumber
-        }
-        labelOfAnswer.text = "\(ans)"
+        abc = array2.randomElement() ?? 0
+        labelOfAnswer.text = "\(Int(abc ?? 0))"
+    
     }
     func showAlert(title:String){
         let alert = UIAlertController(title: "Game Over", message: "Score:\(score)\n High score:\(highscore)", preferredStyle: .alert)
@@ -105,44 +115,29 @@ class ViewController3: UIViewController {
         navigationController?.popViewController(animated: false)
     }
     @IBAction func trueButtonAction(_ sender: UIButton) {
-        if labelOfAnswer.text == "\(ans)"{
+        print("true \(abc)")
+        if labelOfAnswer.text == "\(ans)" && (abc != 0)  {
             score+=1
             scoreLabel.text = "\(score)"
-            ans = first + second
-            genret()
-           
-        }else if labelOfAnswer.text == "\(ans1)"{
-            score+=1
-            scoreLabel.text = "\(score)"
-            ans1 = first - second
             genret()
             
         }
         else{
             showAlert(title: "game over")
         }
-        labelOfAnswer.text = "\(ans)"
        progress()
    }
    @IBAction func falseButtonAction(_ sender: UIButton) {
-       if labelOfAnswer.text == "\(ans)"{
+       if labelOfAnswer.text == "\(abc)"  && (ans != 0) {
            score+=1
            scoreLabel.text = "\(score)"
-           ans = first + second
+          
           genret()
-           
-       }else if labelOfAnswer.text == "\(ans1)"{
-           ans1 = first - second
-           score+=1
-           scoreLabel.text = "\(score)"
-           
-           genret()
            
        }
        else{
-           showAlert(title: "game over")
+          showAlert(title: "game over")
        }
-       labelOfAnswer.text = "\(ans)"
        progress()
        
     }
