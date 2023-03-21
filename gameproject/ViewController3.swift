@@ -9,9 +9,7 @@ class ViewController3: UIViewController {
     var second = 0
     var ans = 0
     var array2 = [Int]()
-    var point = 0
-    //var score = 0
-    var highscore = 0
+    var highscore = UserDefaults.standard.integer(forKey: "highscore")
     var abc = 0
 
     
@@ -33,11 +31,10 @@ class ViewController3: UIViewController {
         pg.progress = 1.0
         progress()
         scoreLabel1()
-      
-        score = point
-       highscore = score
-        updatehighscore()
-        self.updatehighscore()
+//        score = point
+//       highscore = score
+//        updatehighscore()
+//        self.updatehighscore()
        
     }
    
@@ -64,7 +61,7 @@ class ViewController3: UIViewController {
         if score > highscore
         {
             highscore = score
-
+            UserDefaults.standard.set(score, forKey: "highscore")
         }
     }
     func genret(){
@@ -105,7 +102,7 @@ class ViewController3: UIViewController {
             self.naviget()
         }))
         alert.addAction(UIAlertAction(title: "Restart", style: .default,handler: { _ in
-            self.scoreLabel.text = "\(self.point -= self.point)"
+            self.scoreLabel.text = "\(self.score -= self.score)"
             self.score = 0
             self.scoreLabel.text = "0"
             self.progress()
