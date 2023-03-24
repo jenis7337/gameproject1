@@ -8,10 +8,11 @@ class ViewController3: UIViewController {
     var first = 0
     var second = 0
     var ans = 0
+    var life = 1
     var array2 = [Int]()
     var highscore = UserDefaults.standard.integer(forKey: "highscore")
     var abc = 0
-
+    
     
     @IBOutlet weak var pg: UIProgressView!
     @IBOutlet weak var qeustionLabel: UILabel!
@@ -22,22 +23,22 @@ class ViewController3: UIViewController {
     @IBOutlet weak var labelOfAnswer: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var falseButton: UIButton!
-    
-  
-    
+    @IBOutlet weak var lifeLine1: UIImageView!
+    @IBOutlet weak var lifeLine2: UIImageView!
+    @IBOutlet weak var lifeLine3: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         genret()
         pg.progress = 1.0
         progress()
         scoreLabel1()
-//        score = point
-//       highscore = score
-//        updatehighscore()
-//        self.updatehighscore()
-       
+        //        score = point
+        //       highscore = score
+        //        updatehighscore()
+        //        self.updatehighscore()
+        
     }
-   
+    
     func progress(){
         var a : Float = 1.0
         time1.invalidate()
@@ -75,7 +76,7 @@ class ViewController3: UIViewController {
         var subsraction = firstNumber - secondNumber
         
         opretorOfLabel.text = opretor
-
+        
         if opretorOfLabel.text == "+"{
             ans = addition
         }
@@ -93,7 +94,7 @@ class ViewController3: UIViewController {
         
         abc = array2.randomElement() ?? 0
         labelOfAnswer.text = "\(Int(abc ?? 0))"
-    
+        
     }
     func showAlert(title:String){
         updatehighscore()
@@ -102,13 +103,17 @@ class ViewController3: UIViewController {
             self.naviget()
         }))
         alert.addAction(UIAlertAction(title: "Restart", style: .default,handler: { _ in
+            self.lifeLine1.image = UIImage(systemName: "heart.fill")
+            self.lifeLine2.image = UIImage(systemName: "heart.fill")
+            self.lifeLine3.image = UIImage(systemName: "heart.fill")
+            self.life = 1
             self.scoreLabel.text = "\(self.score -= self.score)"
             self.score = 0
             self.scoreLabel.text = "0"
             self.progress()
             self.genret()
             self.updatehighscore()
-           
+            
         }))
         present(alert, animated: true)
     }
@@ -120,25 +125,48 @@ class ViewController3: UIViewController {
         if labelOfAnswer.text == "\(ans)" && (abc != 0)  {
             score+=1
             scoreLabel.text = "\(score)"
-            genret()
             
+        }
+        else if life == 1{
+            lifeLine1.image = UIImage(systemName: "heart")
+            life+=1
+        }
+        else if life == 2{
+            lifeLine2.image = UIImage(systemName: "heart")
+            life+=2
+        }
+        else if life == 3{
+            lifeLine3.image = UIImage(systemName: "heart")
+            life+=3
+        }
+        else{
+            showAlert(title: "Game Over")
+        }
+        
+        progress()
+        genret()
+    }
+    @IBAction func falseButtonAction(_ sender: UIButton) {
+        if labelOfAnswer.text != "\(ans)"   && (abc != 0) {
+            score+=1
+            scoreLabel.text = "\(score)"
+        }
+        else if life == 1{
+            lifeLine1.image = UIImage(systemName: "heart")
+            life+=1
+        }
+        else if life == 2{
+            lifeLine2.image = UIImage(systemName: "heart")
+            life+=2
+        }
+        else if life == 3{
+            lifeLine3.image = UIImage(systemName: "heart")
+            life+=3
         }
         else{
             showAlert(title: "game over")
         }
-       progress()
-   }
-   @IBAction func falseButtonAction(_ sender: UIButton) {
-       if labelOfAnswer.text != "\(ans)"   && (abc != 0) {
-           score+=1
-           scoreLabel.text = "\(score)"
-          genret()
-           
-       }
-       else{
-          showAlert(title: "game over")
-       }
-       progress()
-       
+        progress()
+        genret()
     }
 }
